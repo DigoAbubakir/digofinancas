@@ -1,4 +1,4 @@
-import SidebarWithHeader from "@/src/components/Sidebar";
+import SidebarWithHeader from "@/src/components/Sidebar/SidebarWithHeader";
 import { Box } from "@chakra-ui/react";
 
 export default function Transactions() {
