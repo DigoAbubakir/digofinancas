@@ -40,11 +40,11 @@ interface LinkItemProps {
   icon: IconType;
 }
 const LinkItems: Array<LinkItemProps> = [
-  { name: 'Home', icon: FiHome },
-  { name: 'Trending', icon: FiTrendingUp },
-  { name: 'Explore', icon: FiCompass },
-  { name: 'Favourites', icon: FiStar },
-  { name: 'Settings', icon: FiSettings },
+  { name: 'Dashboard', icon: FiHome },
+  { name: 'Contas', icon: FiTrendingUp },
+  { name: 'Transações', icon: FiCompass },
+  { name: 'Cartões', icon: FiStar },
+  { name: 'Configurações', icon: FiSettings },
 ];
 
 export default function SidebarWithHeader({
@@ -97,14 +97,12 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       {...rest}>
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
         <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
-          Logo
+          Digo Finanças
         </Text>
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
       {LinkItems.map((link) => (
-        <NavItem key={link.name} icon={link.icon}>
-          {link.name}
-        </NavItem>
+        <NavItem key={link.name} icon={link.icon}>{link.name}</NavItem>
       ))}
     </Box>
   );
