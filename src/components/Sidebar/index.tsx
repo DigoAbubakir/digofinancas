@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react';
+import NextLink from "next/link";
 import {
   IconButton,
   Avatar,
@@ -38,13 +39,14 @@ import { ReactText } from 'react';
 interface LinkItemProps {
   name: string;
   icon: IconType;
+  href: string;
 }
 const LinkItems: Array<LinkItemProps> = [
-  { name: 'Dashboard', icon: FiHome },
-  { name: 'Contas', icon: FiTrendingUp },
-  { name: 'Transações', icon: FiCompass },
-  { name: 'Cartões', icon: FiStar },
-  { name: 'Configurações', icon: FiSettings },
+  { name: 'Dashboard', icon: FiHome, href: '/dashboard' },
+  { name: 'Contas', icon: FiTrendingUp, href: '/accounts' },
+  { name: 'Transações', icon: FiCompass, href: '/transactions' },
+  { name: 'Cartões', icon: FiStar, href: '/cards' },
+  { name: 'Configurações', icon: FiSettings, href: '/settings' },
 ];
 
 export default function SidebarWithHeader({
@@ -102,7 +104,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
       {LinkItems.map((link) => (
-        <NavItem key={link.name} icon={link.icon}>{link.name}</NavItem>
+        <NavItem key={link.name} icon={link.icon} href={link.href}>{link.name}</NavItem>
       ))}
     </Box>
   );
@@ -111,10 +113,11 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
 interface NavItemProps extends FlexProps {
   icon: IconType;
   children: ReactText;
+  href: string;
 }
-const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
+const NavItem = ({ icon, children, href, ...rest }: NavItemProps) => {
   return (
-    <Link href="#" style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
+    <Link as={NextLink} href={href} style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
       <Flex
         align="center"
         p="4"
