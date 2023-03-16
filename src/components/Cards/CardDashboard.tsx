@@ -9,7 +9,7 @@ type CardDashboardProps = {
     icon?: IconType;
 }
 
-export function CardDashboard({icon, description, value, color} : CardDashboardProps) {
+export function CardDashboard({ icon, description, value, color }: CardDashboardProps) {
     return (
         <Box bg='white' minH={"auto"} p={"30px"} borderRadius={25} boxShadow="lg">
             <HStack justifyContent={"space-between"} align={"center"}>

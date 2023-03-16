@@ -3,7 +3,7 @@ import { Box } from "@chakra-ui/react";
 
 export default function Dashboard() {
     return (
-        <SidebarWithHeader> 
+        <SidebarWithHeader>
             <Box minH={"300px"} minW="300px" bg='gray.400'>
 
             </Box>
