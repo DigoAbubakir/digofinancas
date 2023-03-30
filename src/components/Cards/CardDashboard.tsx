@@ -1,4 +1,4 @@
-import { Box, Circle, HStack, Icon, Text, VStack } from "@chakra-ui/react";
+import { Box, Circle, HStack, Icon, Text, transition, VStack } from "@chakra-ui/react";
 import { IconType } from "react-icons";
 import { FiHome } from "react-icons/fi";
 
@@ -11,7 +11,19 @@ type CardDashboardProps = {
 
 export function CardDashboard({ icon, description, value, color }: CardDashboardProps) {
     return (
-        <Box bg='white' minH={"auto"} p={"30px"} borderRadius={25} boxShadow="lg">
+        <Box
+            as="button"
+            bg='white'
+            minH={"auto"}
+            p={"30px"}
+            borderRadius={25}
+            _hover={{
+                boxShadow: "lg",
+                transform: 'translateY(-5px)',
+                transitionDuration: '0.4s',
+                transitionTimingFunction: "ease-in-out"
+            }}
+        >
             <HStack justifyContent={"space-between"} align={"center"}>
                 <VStack justify={"flex-start"} alignItems="start">
                     <Text fontFamily={"Roboto"} fontWeight={"normal"} fontSize={"1.2rem"}>{description}</Text>
