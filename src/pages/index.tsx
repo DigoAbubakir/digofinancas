@@ -50,9 +50,6 @@ export default function SimpleCard() {
                 <Checkbox>Lembrar</Checkbox>
                 <Link color={'blue.400'}>Esqueceu sua senha?</Link>
               </Stack>
-
-
-
             </Stack>
 
           </Stack>
