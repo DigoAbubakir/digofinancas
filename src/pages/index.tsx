@@ -1,76 +1,199 @@
 import {
-  Flex,
   Box,
-  FormControl,
-  FormLabel,
-  Input,
-  Checkbox,
-  Stack,
-  Link,
   Button,
+  Center,
+  Checkbox,
+  Flex,
   Heading,
-  Text,
+  IconButton,
+  InputGroup,
+  InputRightElement,
+  LightMode,
+  Stack,
   useColorModeValue,
-  HStack,
-} from '@chakra-ui/react';
+  useToast,
+  Text,
+  VStack, Link
+} from "@chakra-ui/react";
+import * as yup from 'yup';
+import { useMutation } from "react-query";
+import { api } from "../services/api";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import { Formik } from 'formik';
 import NextLink from "next/link";
 
-export default function SimpleCard() {
+
+export type SignInFormData = {
+  login: string;
+  password: string;
+}
+
+const signInFormSchema = yup.object().shape({
+  login: yup.string().required('Login obrigatório'),
+  password: yup.string().required('Senha obrigatória')
+})
+
+const initialValues = {
+  login: '',
+  password: ''
+}
+
+export default function SignIn() {
+  const [show, setShow] = useState(false)
+  const mainColor = useColorModeValue('white', 'gray.700');
+  const boxColor = useColorModeValue('white', 'gray.800');
+  const [loading, setLoading] = useState(false);
+  const toast = useToast()
+  const router = useRouter();
+
+  const handleClick = () => setShow(!show)
+
+  const {mutate: signIn} = useMutation(async ({login, password}: SignInFormData) => {
+    try {
+      setLoading(true)
+      await api.post(`/v1/auth/login`, {
+        login, password
+      })
+
+      await router.push('/dashboard')
+
+    } catch (err) {
+
+      if (err.response.status === 401) {
+        setLoading(false)
+        return toast({
+          title: 'Erro na autenticação',
+          description: "login ou senha incorretos.",
+          status: 'error',
+          duration: 3000,
+          position: 'top',
+          isClosable: true,
+        })
+      }
+
+      if (err.data === undefined) {
+        setLoading(false)
+        return toast({
+          title: 'Erro 500',
+          description: "Um erro aconteceu ao tentar concluir sua solicação, tenta novamente mais tarde.",
+          status: 'error',
+          duration: 3000,
+          position: 'top',
+          isClosable: true,
+        })
+      }
+
+    }
+  });
+
+  const handleSignIn = async (data) => {
+    await signIn(data)
+  }
+
   return (
-    <Flex
-      minH={'100vh'}
-      align={'center'}
-      justify={'center'}
-      minW="350px"
-      bg={useColorModeValue('gray.50', 'gray.800')}>
-      <Stack spacing={8} mx={'auto'} maxW={'450px'} minW="400px" py={12} px={6}>
-        <Stack align={'center'}>
-          <Heading fontSize={'4xl'}>Bem-vindo</Heading>
-          <Heading fontSize={'4xl'}>Faça seu login</Heading>
-        </Stack>
-        <Box
-          rounded={'lg'}
-          bg={useColorModeValue('white', 'gray.700')}
-          boxShadow={'lg'}
-          p={8}>
-          <Stack spacing={4}>
-            <FormControl id="email">
-              <FormLabel>Email</FormLabel>
-              <Input type="email" />
-            </FormControl>
-            <FormControl id="password">
-              <FormLabel>Senha</FormLabel>
-              <Input type="password" />
-            </FormControl>
-            <Stack spacing={10}>
-              <Stack
-                direction={{ base: 'column', sm: 'row' }}
-                align={'start'}
-                justify={'space-between'}>
-                <Checkbox>Lembrar</Checkbox>
-                <Link color={'blue.400'}>Esqueceu sua senha?</Link>
-              </Stack>
-            </Stack>
-
-          </Stack>
-          <HStack justify={"center"} align="center" mt={5}>
-            <NextLink style={{ width: "100%" }} href={"/dashboard"} passHref>
-              <Button
-                w={"100%"}
-                bg={'blue.400'}
-                color={'white'}
-                _hover={{
-                  bg: 'blue.500',
-                }}>
-                Entrar
-              </Button>
-            </NextLink>
-
-          </HStack>
-
-
-        </Box>
+    <Flex w="100vw"
+          h="100vh"
+          align="center"
+          justify="center"
+          bg={useColorModeValue('gray.50', 'gray.800')}
+    >
+      <Stack spacing={8} mx={'auto'} w={'450px'} minW={'430px'} py={12} px={6}>
+        <Flex width="100%"
+              maxWidth={"auto"}
+              bg={boxColor}
+              p={"8"}
+              rounded={'lg'}
+              flexDir={"column"}
+              boxShadow={'lg'}
+        >
+          <Formik initialValues={initialValues}
+                  validateOnChange={false}
+                  validationSchema={signInFormSchema}
+                  onSubmit={handleSignIn}
+          >
+            {({handleSubmit, handleChange, values, errors}) =>
+              <>
+                <form onSubmit={handleSubmit}>
+                  <Stack spacing={4}>
+                    <Center pb={10}>
+                      <Box maxH={"400px"} maxW={"230px"} >
+                        {
+                          mainColor == 'white' ? (
+                            <>
+                              <VStack>
+                                <Heading fontFamily={'Poppins'} fontWeight={"bold"} fontSize={'25px'}>Free Bills</Heading>
+                              </VStack>
+                            </>
+                          ) : (
+                            <>
+                              <VStack>
+                                <Heading fontFamily={'Poppins'} fontWeight={"bold"} fontSize={'25px'}>Free Bills</Heading>
+                              </VStack>
+                            </>
+                          )
+                        }
+                      </Box>
+                    </Center>
+                    <InputFormik name={"login"}
+                                 type={"text"}
+                                 onChange={handleChange}
+                                 value={values.login}
+                                 error={errors.login}
+                                 placeholder={"Login"}
+                    />
+                    <InputGroup size='md'>
+                      <InputFormik name={"password"}
+                                   type={show ? 'text' : 'password'}
+                                   onChange={handleChange}
+                                   value={values.password}
+                                   error={errors.password}
+                                   placeholder={"Senha"}
+                      />
+                      <InputRightElement width='4.5rem'>
+                        <IconButton ml={"30px"}
+                                    bg="inherit"
+                                    borderRadius="inherit"
+                                    _focus={{
+                                      boxShadow: "none",
+                                    }}
+                                    onClick={handleClick}
+                                    size="sm"
+                                    variant="unstyled"
+                                    aria-label="show pass"
+                                    icon={show ? <ViewIcon /> : <ViewOffIcon />}
+                        />
+                      </InputRightElement>
+                    </InputGroup>
+                  </Stack>
+                  <Stack spacing={5} mt={4}>
+                    <Stack
+                      direction={{base: 'column', sm: 'row'}}
+                      align={'start'}
+                      justify={'space-between'}>
+                      <Checkbox>Lembrar</Checkbox>
+                      <NextLink href={"/forgot"}>
+                        <Text align={'center'} mt={3}>
+                          <Link color={'blue.400'}>Esqueceu sua senha?</Link>
+                        </Text>
+                      </NextLink>
+                    </Stack>
+                    <LightMode>
+                      <Button type={"submit"} marginTop={6} colorScheme={"facebook"} isLoading={loading}>Entrar</Button>
+                    </LightMode>
+                  </Stack>
+                  <NextLink href={"/sign-in"}>
+                    <Text align={'center'} mt={3}>
+                      <Link color={'blue.400'}>Cadastre-se</Link>
+                    </Text>
+                  </NextLink>
+                </form>
+              </>
+            }
+          </Formik>
+        </Flex>
       </Stack>
     </Flex>
-  );
+  )
 }
