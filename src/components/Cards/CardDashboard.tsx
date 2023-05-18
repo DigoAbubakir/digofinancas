@@ -1,4 +1,5 @@
 import { Box, Circle, HStack, Icon, Text, transition, VStack } from "@chakra-ui/react";
+import React from "react";
 import { IconType } from "react-icons";
 import { FiHome } from "react-icons/fi";
 
