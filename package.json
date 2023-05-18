@@ -16,7 +16,6 @@
     "@emotion/styled": "^11.8.1",
     "@hookform/resolvers": "^2.8.10",
     "@types/faker": "^5.1.2",
-    "@types/react-input-mask": "^3.0.2",
     "apexcharts": "^3.35.5",
     "axios": "^0.27.2",
     "chart.js": "^3.9.1",

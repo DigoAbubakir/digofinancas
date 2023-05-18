@@ -1,7 +1,8 @@
-import { CardDashboard } from "@/src/components/Cards/CardDashboard";
-import SidebarWithHeader from "@/src/components/Sidebar/SidebarWithHeader";
 import { Box, Circle, Heading, HStack, Icon, SimpleGrid, Text } from "@chakra-ui/react";
+import React from "react";
 import { FiDatabase,FiChevronsDown, FiChevronsUp, FiArchive } from "react-icons/fi";
+import { CardDashboard } from "../../components/Cards/CardDashboard";
+import SidebarWithHeader from "../../components/Sidebar/SidebarWithHeader";
 
 export default function Dashboard() {
     return (
