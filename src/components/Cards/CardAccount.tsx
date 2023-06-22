@@ -20,6 +20,7 @@ export function CardAccount({ icon, description, value, color }: CardDashboardPr
             h={"200px"}
             w={"350px"}
 
+            
             _hover={{
                 boxShadow: "lg",
                 transform: 'translateY(-5px)',
